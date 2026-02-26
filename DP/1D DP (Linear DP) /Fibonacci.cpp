@@ -45,6 +45,48 @@ int Optimized(int n) {
     }
     return p1;
 }
+
+
+// Matrix Exponentiation for n <= 1e18
+// TC : O(log n)
+struct Matrix {
+    int a[2][2];
+};
+const int mod = 1e9+7;
+Matrix mul(Matrix x, Matrix y) {
+    Matrix res;
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 2; j++) {
+            res.a[i][j] = 0;
+            for(int k = 0; k < 2; k++) {
+                res.a[i][j] = (res.a[i][j] + 1LL * x.a[i][k] * y.a[k][j] % mod) % mod;
+            }
+        }
+    }
+    return res;
+}
+Matrix power(Matrix base, ll p) {
+    Matrix res;
+    res.a[0][0] = 1, res.a[0][1] = 0;
+    res.a[1][0] = 0, res.a[1][1] = 1;
+
+    while (p > 0) {
+        if(p & 1) res = mul(res, base);
+        base = mul(base, base);
+        p >>= 1;
+    }
+    return res;
+}
+ll matrix_fibo(ll n) {
+    if(n == 0) return 0;
+    Matrix T;
+    T.a[0][0] = 1, T.a[0][1] = 1;
+    T.a[1][0] = 1, T.a[1][1] = 0;
+
+    Matrix res = power(T, n-1);
+    return res.a[0][0];
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -59,5 +101,7 @@ int main()
     cout << "Tabulation = " << Tabulation(n) << endl;
 
     cout << "Space Optimization = " << Optimized(n) << endl;
+
+    cout << "Matrix Exp = " << matrix_fibo(n) << nl;
     return 0;
 }
