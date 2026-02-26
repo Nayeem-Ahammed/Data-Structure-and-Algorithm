@@ -87,12 +87,16 @@ ll matrix_fibo(ll n) {
     return res.a[0][0];
 }
 
+// sum of n fibos:    F(0) + F(1) + ... + F(n) = F(n+2) - 1;
+ll RangeFibo(ll l, ll r) {
+    return (matrix_fibo(r+2) - matrix_fibo(l+2 - 1) + mod) % mod;
+}
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(0);
 
-    int n; cin >> n;
+    ll n; cin >> n;
     cout <<"Recursion = " << Recursion(n) << endl;
 
     fill(dp, dp+N, -1);
@@ -102,6 +106,9 @@ int main()
 
     cout << "Space Optimization = " << Optimized(n) << endl;
 
-    cout << "Matrix Exp = " << matrix_fibo(n) << nl;
+    cout << "Matrix Exp = " << matrix_fibo(n) << endl;
+
+    ll l, r; cin >> l >> r;
+    cout << "Range sum = " << RangeFibo(l, r) << endl;
     return 0;
 }
